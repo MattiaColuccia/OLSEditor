@@ -441,22 +441,24 @@ createButton.Click += (System.Object sender6, System.EventArgs e6) => {
     foreach (System.Windows.Forms.TreeNode rootNode in treeView.Nodes)
     {
         string tableName = rootNode.Text;
-		/*
+		
         if (rootNode.StateImageIndex == 1)
         {
             Model.Tables[tableName].ObjectLevelSecurity[roleName] = MetadataPermission.None;            
         }
-		*/
-        // Loop through checked child nodes (columns)
-        foreach (System.Windows.Forms.TreeNode childNode in rootNode.Nodes)
-        {
-            string objectName = childNode.Text;
-             
-            if (childNode.StateImageIndex == 1)
-            {
-                Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.None;                 
-            }
-        }
+		else 
+		{
+			// Loop through checked child nodes (columns)
+			foreach (System.Windows.Forms.TreeNode childNode in rootNode.Nodes)
+			{
+				string objectName = childNode.Text;
+				 
+				if (childNode.StateImageIndex == 1)
+				{
+					Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.None;                 
+				}
+			}
+		}
     }   
 };
 
