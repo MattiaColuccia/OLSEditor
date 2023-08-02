@@ -225,19 +225,19 @@ foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
 newmodelButton.Click += (System.Object sender1, System.EventArgs e1) => {
     goButton.Visible = true;
     existingmodelButton.Checked = false;
-	rolesLabel.Visible = false;
+    rolesLabel.Visible = false;
     newmodelButton.Checked = true;
     goButton.Location = new Point(startScreenX+25, startScreenY+80);
     enterComboBox.Visible = false;
     goButton.Enabled = true;
     enterComboBox.Text = string.Empty;
-    createButton.Text = "Create Role with OLS";	
+    createButton.Text = "Create Role with OLS"; 
     enterTextBox.Enabled = true;
 };
 
 // add change existing role section
 existingmodelButton.Click += (System.Object sender2, System.EventArgs e2) => {
-	rolesLabel.Visible = true;
+    rolesLabel.Visible = true;
     goButton.Location = new Point(startScreenX+25, startScreenY+210);
     enterComboBox.Visible = true;
     goButton.Visible = true;    
@@ -248,23 +248,23 @@ existingmodelButton.Click += (System.Object sender2, System.EventArgs e2) => {
     
     // Add items to combo box
     enterComboBox.Items.Clear();
-	foreach (var p in Model.Roles.ToList())
-	{
-		string filterExpr = "";
-		string pName = p.Name;
-		// Only roles with no RLS are candidates for OLS
-		if (p.TablePermissions.Count != 0)
-		{
-			foreach (var t in p.TablePermissions)
-			{
-				filterExpr += t.FilterExpression;
-			}
-		}
-		if (filterExpr == "")
-		{
-			enterComboBox.Items.Add(pName);
-		}
-	};
+    foreach (var p in Model.Roles.ToList())
+    {
+        string filterExpr = "";
+        string pName = p.Name;
+        // Only roles with no RLS are candidates for OLS
+        if (p.TablePermissions.Count != 0)
+        {
+            foreach (var t in p.TablePermissions)
+            {
+                filterExpr += t.FilterExpression;
+            }
+        }
+        if (filterExpr == "")
+        {
+            enterComboBox.Items.Add(pName);
+        }
+    };
     
     if (enterComboBox.SelectedItem == null)
     {
@@ -283,7 +283,7 @@ goButton.Click += (System.Object sender4, System.EventArgs e4) => {
     existingmodelButton.Visible = false;    
     enterComboBox.Visible = false;
     goButton.Visible = false;
-    rolesLabel.Visible = false;	
+    rolesLabel.Visible = false; 
     
     string p = enterComboBox.Text;
     
@@ -292,7 +292,7 @@ goButton.Click += (System.Object sender4, System.EventArgs e4) => {
     createButton.Visible = true;
     treeView.Visible = true;
     nameLabel.Visible = true;
-	
+    
     enterTextBox.Visible = true;
     
     // add populate tree if modifying
@@ -306,45 +306,45 @@ goButton.Click += (System.Object sender4, System.EventArgs e4) => {
             string tableName = rootNode.Text;
             int childNodeCount = rootNode.Nodes.Count;
             int childNodeCheckedCount = 0;
-			// if permission is set at table level, set parent node (table) to checked
-			if (Model.Tables[tableName].ObjectLevelSecurity[p] == MetadataPermission.None)
-			{
-				rootNode.StateImageIndex = 1;
-			}
-			else 
-			{
-				// Loop through checked child nodes (columns, measures, hierarchies)
-				foreach (System.Windows.Forms.TreeNode childNode in rootNode.Nodes)
-				{
-					var objectName = childNode.Text;
-					
-					if (childNode.ImageIndex == 1)
-					{
-						if (Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[p] == MetadataPermission.None)
-						{
-							childNode.StateImageIndex = 1;
-						}
-					}
-					
-					if (childNode.StateImageIndex == 1)
-					{
-					   childNodeCheckedCount+=1;
-					}
-				}	
-				// Finish populating tree root nodes (tables)
-				// If no child nodes are checked, set parent node to unchecked
-				if (childNodeCheckedCount == 0)
-				{
-					rootNode.StateImageIndex = 0;
-				}
-				// If not all children nodes are selected, set parent node to partially checked icon
-				else if (childNodeCheckedCount < childNodeCount)
-				{
-					rootNode.StateImageIndex = 2;
-				}
-			}             
+            // if permission is set at table level, set parent node (table) to checked
+            if (Model.Tables[tableName].ObjectLevelSecurity[p] == MetadataPermission.None)
+            {
+                rootNode.StateImageIndex = 1;
+            }
+            else 
+            {
+                // Loop through checked child nodes (columns, measures, hierarchies)
+                foreach (System.Windows.Forms.TreeNode childNode in rootNode.Nodes)
+                {
+                    var objectName = childNode.Text;
+                    
+                    if (childNode.ImageIndex == 1)
+                    {
+                        if (Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[p] == MetadataPermission.None)
+                        {
+                            childNode.StateImageIndex = 1;
+                        }
+                    }
+                    
+                    if (childNode.StateImageIndex == 1)
+                    {
+                       childNodeCheckedCount+=1;
+                    }
+                }   
+                // Finish populating tree root nodes (tables)
+                // If no child nodes are checked, set parent node to unchecked
+                if (childNodeCheckedCount == 0)
+                {
+                    rootNode.StateImageIndex = 0;
+                }
+                // If not all children nodes are selected, set parent node to partially checked icon
+                else if (childNodeCheckedCount < childNodeCount)
+                {
+                    rootNode.StateImageIndex = 2;
+                }
+            }             
         }
-    } 	
+    }   
 };
 
 treeView.NodeMouseClick += (System.Object sender, System.Windows.Forms.TreeNodeMouseClickEventArgs e) => {
@@ -429,41 +429,44 @@ createButton.Click += (System.Object sender6, System.EventArgs e6) => {
         // Invalid role name
         Error("Please enter a name for the new role.");
     }
+
     if (Model.Roles.Any(a => a.Name == roleName) && (createButton.Text == "Create Role with OLS"))
     {
-		Error("A role with this name already exists.");
+        Error("A role with this name already exists.");
     }
 	
-	// Create new role if needed
-	if (createButton.Text == "Create Role with OLS")
-	{
-		Model.AddRole(roleName);
-		Model.Roles[roleName].ModelPermission = ModelPermission.Read;
-	}
-	
+  	 // Create new role if needed
+  	 if (createButton.Text == "Create Role with OLS")
+	  {
+        Model.AddRole(roleName);
+		    Model.Roles[roleName].ModelPermission = ModelPermission.Read;
+	  }
+
     // Loop through root nodes (tables)
     foreach (System.Windows.Forms.TreeNode rootNode in treeView.Nodes)
     {
         string tableName = rootNode.Text;
-		/*
+        // If table is selected, remove permission at table level
         if (rootNode.StateImageIndex == 1)
         {
-            Model.Tables[tableName].ObjectLevelSecurity[roleName] = MetadataPermission.None;            
+            // Before removing permission from table I need to remove from at least one column, otherwise I get indexing error
+            Model.Tables[tableName].Columns[0].ObjectLevelSecurity[roleName] = MetadataPermission.None;   
+            Model.Tables[tableName].ObjectLevelSecurity[roleName] = MetadataPermission.None;
+            Model.Tables[tableName].Columns[0].ObjectLevelSecurity[roleName] = MetadataPermission.Default;             
         }
-		else 
-		{
-		*/
-		// Loop through checked child nodes (columns)
-		foreach (System.Windows.Forms.TreeNode childNode in rootNode.Nodes)
-		{
-			string objectName = childNode.Text;
-			 
-			if (childNode.StateImageIndex == 1)
-			{
-				Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.None;                 
-			}
-		}
-		// }
+        else 
+        {        
+            // Loop through checked child nodes (columns)
+            foreach (System.Windows.Forms.TreeNode childNode in rootNode.Nodes)
+            {
+                string objectName = childNode.Text;
+                 
+                if (childNode.StateImageIndex == 1)
+                {
+                    Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.None;                 
+                }
+            }
+        }
     }   
 };
 
