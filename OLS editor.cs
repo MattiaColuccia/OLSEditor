@@ -434,14 +434,13 @@ createButton.Click += (System.Object sender6, System.EventArgs e6) => {
     {
         Error("A role with this name already exists.");
     }
-	
-  	 // Create new role if needed
-  	 if (createButton.Text == "Create Role with OLS")
-	  {
+    
+    // Create new role if needed
+    if (createButton.Text == "Create Role with OLS")
+    {
         Model.AddRole(roleName);
-		    Model.Roles[roleName].ModelPermission = ModelPermission.Read;
-	  }
-
+        Model.Roles[roleName].ModelPermission = ModelPermission.Read;      
+    } 
     // Loop through root nodes (tables)
     foreach (System.Windows.Forms.TreeNode rootNode in treeView.Nodes)
     {
@@ -467,7 +466,7 @@ createButton.Click += (System.Object sender6, System.EventArgs e6) => {
                 }
             }
         }
-    }   
+	}
 };
 
 newForm.Show();
