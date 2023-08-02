@@ -33,12 +33,11 @@ System.Drawing.Font stdFont = new Font(fontName, 10);
 System.Drawing.Font elegantFont = new Font(fontName, 10, FontStyle.Italic);
 
 // Add images from web to Image List
-string urlPrefix = "https://github.com/m-kovalsky/Tabular/raw/master/Icons/";
-string urlSuffix = "Icon.png";
+string urlPrefix = "https://github.com/MattiaColuccia/OLSEditor/tree/main/Icons/";
+string urlSuffix = ".png";
 string toolName = "OLS Editor";
-string ebiURL = @"https://www.elegantbi.com";
 
-string[] imageURLList = { "Table", "Column", "Measure", "Hierarchy" };
+string[] imageURLList = { "Table", "Column" };
 for (int b = 0; b < imageURLList.Count(); b++)
 {
     string url = urlPrefix + imageURLList[b] + urlSuffix;      
