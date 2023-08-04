@@ -32,7 +32,7 @@ System.Drawing.Font stdFont = new Font(fontName, 10);
 System.Drawing.Font elegantFont = new Font(fontName, 10, FontStyle.Italic);
 
 // Add images from web to Image List
-string urlPrefix = "https://github.com/m-kovalsky/Tabular/raw/master/Icons/";
+string urlPrefix = "https://github.com/MattiaColuccia/OLSEditor/raw/main/Icons/";
 string urlSuffix = "Icon.png";
 string toolName = "OLS Editor";
 
@@ -40,7 +40,6 @@ string[] imageURLList = { "Table", "Column" };
 for (int b = 0; b < imageURLList.Count(); b++)
 {
     string url = urlPrefix + imageURLList[b] + urlSuffix;  
-    //var imageByte = await httpClient.GetByteArrayAsync(url);
     byte[] imageByte = w.DownloadData(url);
     System.IO.MemoryStream ms = new System.IO.MemoryStream(imageByte);
     System.Drawing.Image im = System.Drawing.Image.FromStream(ms);
@@ -456,7 +455,10 @@ createButton.Click += (System.Object sender6, System.EventArgs e6) => {
         {   // If table gest unchecked, permission must be restored
             if (rootNode.StateImageIndex == 0)
             {   
-                Model.Tables[tableName].ObjectLevelSecurity[roleName] = MetadataPermission.Default;                          
+                if (Model.Roles[roleName].TablePermissions.Contains(tableName))
+                {
+                    Model.Roles[roleName].TablePermissions[tableName].Delete();
+                }                           
             } 
             else // Case rootNode.StateImageIndex == 2, table partially checked --> I need to check every column
             {
