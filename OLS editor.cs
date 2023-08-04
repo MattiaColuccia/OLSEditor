@@ -453,17 +453,28 @@ createButton.Click += (System.Object sender6, System.EventArgs e6) => {
             Model.Tables[tableName].Columns[0].ObjectLevelSecurity[roleName] = MetadataPermission.Default;             
         }
         else 
-        {        
-            // Loop through checked child nodes (columns)
-            foreach (System.Windows.Forms.TreeNode childNode in rootNode.Nodes)
-            {
-                string objectName = childNode.Text;
-                 
-                if (childNode.StateImageIndex == 1)
-                {
-                    Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.None;                 
-                }
-            }
+        {   // If table gest unchecked, permission must be restored
+			if (rootNode.StateImageIndex == 0)
+			{				
+				Model.Tables[tableName].ObjectLevelSecurity[roleName] = MetadataPermission.None;				          
+			} 
+			else // Case rootNode.StateImageIndex == 2, table partially checked --> I need to check every column
+			{
+				// Loop through checked child nodes (columns)
+				foreach (System.Windows.Forms.TreeNode childNode in rootNode.Nodes)
+				{
+					string objectName = childNode.Text;
+					
+					if (childNode.StateImageIndex == 1)
+					{
+						Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.None;                 
+					}
+					else 
+					{
+						Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.Default;                 
+					}
+				}
+			}
         }
 	}
 };
