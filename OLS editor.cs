@@ -454,11 +454,11 @@ createButton.Click += (System.Object sender6, System.EventArgs e6) => {
         else 
         {   // If table gest unchecked, permission must be restored
             if (rootNode.StateImageIndex == 0)
-            {   
+            {    
                 if (Model.Roles[roleName].TablePermissions.Contains(tableName))
                 {
                     Model.Roles[roleName].TablePermissions[tableName].Delete();
-                }                           
+                }                
             } 
             else // Case rootNode.StateImageIndex == 2, table partially checked --> I need to check every column
             {
@@ -469,13 +469,15 @@ createButton.Click += (System.Object sender6, System.EventArgs e6) => {
                     
                     if (childNode.StateImageIndex == 1)
                     {
-                        Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.None;                 
+                        Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.None;
                     }
                     else 
                     {
-                        Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.Default;                 
+                        Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.Default;
+                        
                     }
                 }
+                Model.Tables[tableName].ObjectLevelSecurity[roleName] = MetadataPermission.Default;
             }
         }
     }
