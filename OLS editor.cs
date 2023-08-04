@@ -1,5 +1,4 @@
 #r "System.Drawing"
-
 using System.Drawing;
 
 // Create elements
@@ -33,14 +32,15 @@ System.Drawing.Font stdFont = new Font(fontName, 10);
 System.Drawing.Font elegantFont = new Font(fontName, 10, FontStyle.Italic);
 
 // Add images from web to Image List
-string urlPrefix = "https://github.com/MattiaColuccia/OLSEditor/tree/main/Icons/";
-string urlSuffix = ".png";
+string urlPrefix = "https://github.com/m-kovalsky/Tabular/raw/master/Icons/";
+string urlSuffix = "Icon.png";
 string toolName = "OLS Editor";
 
 string[] imageURLList = { "Table", "Column" };
 for (int b = 0; b < imageURLList.Count(); b++)
 {
-    string url = urlPrefix + imageURLList[b] + urlSuffix;      
+    string url = urlPrefix + imageURLList[b] + urlSuffix;  
+    //var imageByte = await httpClient.GetByteArrayAsync(url);
     byte[] imageByte = w.DownloadData(url);
     System.IO.MemoryStream ms = new System.IO.MemoryStream(imageByte);
     System.Drawing.Image im = System.Drawing.Image.FromStream(ms);
@@ -453,19 +453,30 @@ createButton.Click += (System.Object sender6, System.EventArgs e6) => {
             Model.Tables[tableName].Columns[0].ObjectLevelSecurity[roleName] = MetadataPermission.Default;             
         }
         else 
-        {        
-            // Loop through checked child nodes (columns)
-            foreach (System.Windows.Forms.TreeNode childNode in rootNode.Nodes)
+        {   // If table gest unchecked, permission must be restored
+            if (rootNode.StateImageIndex == 0)
+            {   
+                Model.Tables[tableName].ObjectLevelSecurity[roleName] = MetadataPermission.Default;                          
+            } 
+            else // Case rootNode.StateImageIndex == 2, table partially checked --> I need to check every column
             {
-                string objectName = childNode.Text;
-                 
-                if (childNode.StateImageIndex == 1)
+                // Loop through checked child nodes (columns)
+                foreach (System.Windows.Forms.TreeNode childNode in rootNode.Nodes)
                 {
-                    Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.None;                 
+                    string objectName = childNode.Text;
+                    
+                    if (childNode.StateImageIndex == 1)
+                    {
+                        Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.None;                 
+                    }
+                    else 
+                    {
+                        Model.Tables[tableName].Columns[objectName].ObjectLevelSecurity[roleName] = MetadataPermission.Default;                 
+                    }
                 }
             }
         }
-	}
+    }
 };
 
 newForm.Show();
